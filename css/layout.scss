@@ -86,7 +86,7 @@
 }
 
 @mixin layout-for-name($name) {
-  [layout-#{$name}] {
+  .layout-#{$name} {
     box-sizing: border-box;
     display: -webkit-box;
     display: -webkit-flex;

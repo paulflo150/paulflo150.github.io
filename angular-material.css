@@ -743,7 +743,7 @@ select, button, textarea, input {
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
             align-items: flex-end; }
-  [layout-sm] {
+  .layout-sm {
     box-sizing: border-box;
     display: -webkit-flex;
     display: -moz-flex;
@@ -1058,7 +1058,7 @@ select, button, textarea, input {
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
             align-items: flex-end; }
-  [layout-gt-sm] {
+  .layout-gt-sm {
     box-sizing: border-box;
     display: -webkit-flex;
     display: -moz-flex;
@@ -1377,7 +1377,7 @@ select, button, textarea, input {
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
             align-items: flex-end; }
-  [layout-md] {
+  .layout-md {
     box-sizing: border-box;
     display: -webkit-flex;
     display: -moz-flex;
@@ -1692,7 +1692,7 @@ select, button, textarea, input {
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
             align-items: flex-end; }
-  [layout-gt-md] {
+  .layout-gt-md {
     box-sizing: border-box;
     display: -webkit-flex;
     display: -moz-flex;
@@ -2011,7 +2011,7 @@ select, button, textarea, input {
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
             align-items: flex-end; }
-  [layout-lg] {
+  .layout-lg {
     box-sizing: border-box;
     display: -webkit-flex;
     display: -moz-flex;
@@ -2328,7 +2328,7 @@ select, button, textarea, input {
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
             align-items: flex-end; }
-  [layout-gt-lg] {
+  .layout-gt-lg {
     box-sizing: border-box;
     display: -webkit-flex;
     display: -moz-flex;
