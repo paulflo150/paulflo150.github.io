@@ -4,7 +4,7 @@
 
   angular.module('material.layouts', ['material.core'])
 
-      // Attribute directives with optional value(s); add directiveName as a class
+      // Attribute directives with optional value(s)
       
       .directive('layout'              , attribute_withValue('layout'      , true)  )
       .directive('layout-sm'           , attribute_withValue('layout-sm'   , true)  )
@@ -68,11 +68,11 @@
      */
     function attribute_withValue(className, addDirectiveAsClass) {
         return [function() {
-            var directive = $normalize(className);
             return {
                 link: function(link, element, attrs) {
+                    var directive = attrs.$normalize(className);
                     if (addDirectiveAsClass)  element.addClass(directive);
-                    if (attrs[directive])     element.addClass(directive + "-" + attrs[directive].replace(/ /g, "-"));
+                    if (attrs[directive])     element.addClass(directive + "-" + attrs[directive].replace(/\s*/g, "-"));
                 }
             };
         }];
@@ -80,36 +80,13 @@
 
     function attribute_noValue(className) {
         return [function() {
-            var directive = $normalize(className);
             return {
                 link: function(link, element, attrs) {
+                    var directive = attrs.$normalize(className);
                     element.addClass(directive);
                 }
             };
         }];
     }
-
-    /**
-     * Converts all accepted directives format into proper directive name.
-     * @param name Name to normalize
-     */
-    function $normalize(name) {
-        return camelCase(name.replace(PREFIX_REGEXP, ''));
-    }
-
-    /**
-     * Converts snake_case to camelCase.
-     * Also there is special case for Moz prefix starting with upper case letter.
-     * @param name Name to normalize
-     */
-    function camelCase(name) {
-        return name
-                .replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
-                    return offset ? letter.toUpperCase() : letter;
-                })
-                .replace(MOZ_HACK_REGEXP, 'Moz$1');
-    }
-
-    var PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
 
 })();
