@@ -4,7 +4,7 @@
 
   angular.module('material.layouts', ['material.core'])
 
-      // Attribute directives with optional value(s)
+      // Attribute directives with optional value(s); add directiveName as a class
       
       .directive('layout'              , attribute_withValue('layout'      , true)  )
       .directive('layout-sm'           , attribute_withValue('layout-sm'   , true)  )
