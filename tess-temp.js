@@ -46,50 +46,34 @@
       .directive('layout-wrap'         , attribute_noValue('layout-wrap')           )
       .directive('layout-fill'         , attribute_noValue('layout-fill')           );
 
-  /**
-   * To convert use of attribute selectors to class selectors,
-   * use a directive to do the work.
-   */
-  function attribute_withValue( className, addDirectiveAsClass ) {
-      return [function() {
-          var directive = $normalize(className);
-          return {
-              /**
-               * Creates a postLink function for ngMaterial Layout attribute directive
-               * Note: This provides easy translation to switch ngMaterial
-               * attribute selectors to CLASS selectors and directives.
-               *
-               * !! This is important for IE Browser performance
-               *
-               * @param directive String like flextGtMd
-               * @param classname String like flex-gt-md
-               */
-              link: function(link, element, attrs) {
-                  if ( addDirectiveAsClass )  element.addClass(directive);
-                  if ( attrs[directive] )     element.addClass(directive + "-" + attrs[directive].replace(/ /g, "-"));
-              }
-          };
-      }];
-  }
-
     /**
-     * To convert use of attribute selectors to class selectors,
-     * use a directive to do the work.
+     * Creates a registration function with Directive postLink function
+     * for ngMaterial Layout attribute directive
+     *
+     * Note: This provides easy translation to switch ngMaterial
+     * attribute selectors to CLASS selectors and directives.
+     *
+     * !! This is important for IE Browser performance
+     *
+     * @param classname String like flex-gt-md
+     * @param addDirectiveAsClass Boolean
      */
-    function attribute_noValue( className ) {
+    function attribute_withValue(className, addDirectiveAsClass) {
         return [function() {
             var directive = $normalize(className);
             return {
-                /**
-                 * Creates a postLink function for ngMaterial Layout attribute directive
-                 * Note: This provides easy translation to switch ngMaterial
-                 * attribute selectors to CLASS selectors and directives.
-                 *
-                 * !! This is important for IE Browser performance
-                 *
-                 * @param directive String like flextGtMd
-                 * @param classname String like flex-gt-md
-                 */
+                link: function(link, element, attrs) {
+                    if (addDirectiveAsClass)  element.addClass(directive);
+                    if (attrs[directive])     element.addClass(directive + "-" + attrs[directive].replace(/ /g, "-"));
+                }
+            };
+        }];
+    }
+
+    function attribute_noValue(className) {
+        return [function() {
+            var directive = $normalize(className);
+            return {
                 link: function(link, element, attrs) {
                     element.addClass(directive);
                 }
@@ -97,27 +81,27 @@
         }];
     }
 
-  /**
-   * Converts all accepted directives format into proper directive name.
-   * @param name Name to normalize
-   */
-  function $normalize(name) {
-      return camelCase(name.replace(PREFIX_REGEXP, ''));
-  }
+    /**
+     * Converts all accepted directives format into proper directive name.
+     * @param name Name to normalize
+     */
+    function $normalize(name) {
+        return camelCase(name.replace(PREFIX_REGEXP, ''));
+    }
 
-  var PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
+    /**
+     * Converts snake_case to camelCase.
+     * Also there is special case for Moz prefix starting with upper case letter.
+     * @param name Name to normalize
+     */
+    function camelCase(name) {
+        return name
+                .replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
+                    return offset ? letter.toUpperCase() : letter;
+                })
+                .replace(MOZ_HACK_REGEXP, 'Moz$1');
+    }
 
-  /**
-   * Converts snake_case to camelCase.
-   * Also there is special case for Moz prefix starting with upper case letter.
-   * @param name Name to normalize
-   */
-  function camelCase(name) {
-      return name.
-              replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
-                  return offset ? letter.toUpperCase() : letter;
-              }).
-              replace(MOZ_HACK_REGEXP, 'Moz$1');
-  }
+    var PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
 
 })();
