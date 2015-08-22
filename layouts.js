@@ -88,7 +88,7 @@
                 link: function(link, element, attrs) {
                     var directive = attrs.$normalize(className);
                     if (addDirectiveAsClass)  element.addClass(className);
-                    if (attrs[directive])     element.addClass(className + "-" + attrs[directive].replace(/ \s*/g, "-"));
+                    if (attrs[directive])     element.addClass(className + "-" + attrs[directive].replace(/\s*/g, "-"));
                 }
             };
         }];
