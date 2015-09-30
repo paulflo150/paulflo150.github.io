@@ -16675,6 +16675,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.id         = $mdUtil.nextUid();
   ctrl.isDisabled = null;
   ctrl.isRequired = null;
+  ctrl.hasNotFoundTemplate = false;
 
   //-- public methods
   ctrl.keydown                       = keydown;
@@ -17095,7 +17096,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @returns {boolean}
    */
   function shouldHide () {
-    if (!isMinLengthMet()) return true;
+    if (!isMinLengthMet() || (!ctrl.matches.length && !ctrl.hasNotFoundTemplate)) return true;
   }
 
   /**
@@ -17242,10 +17243,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
   function scrollTo (offset) {
     elements.$.scrollContainer.controller('mdVirtualRepeatContainer').scrollTo(offset);
-  }
-
-  function notFoundVisible () {
-    return !ctrl.matches.length && !ctrl.loading && ctrl.scope.searchText && hasFocus && !ctrl.scope.selectedItem;
   }
 
   /**
@@ -17487,8 +17484,9 @@ function MdAutocomplete () {
       function getNoItemsTemplate() {
         var templateTag = element.find('md-not-found').detach(),
             template = templateTag.length ? templateTag.html() : '';
+        //MdAutocompleteCtrl.hasNotFoundTemplate = template ? true : false;
         return template
-            ? '<li ng-if="!$mdAutocompleteCtrl.matches.length" ng-click="$mdAutocompleteCtrl.notFoundClick()"\
+            ? '<li ng-if="!$mdAutocompleteCtrl.matches.length" ng-click="$mdAutocompleteCtrl.notFoundClick()" ng-init="$mdAutocompleteCtrl.hasNotFoundTemplate = true"\
                         md-autocomplete-parent-scope>' + template + '</li>'
             : '';
       }
