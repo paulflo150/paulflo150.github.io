@@ -16675,6 +16675,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.id         = $mdUtil.nextUid();
   ctrl.isDisabled = null;
   ctrl.isRequired = null;
+  ctrl.hasNotFoundTemplate = false;
 
   //-- public methods
   ctrl.keydown                       = keydown;
@@ -16688,7 +16689,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.getCurrentDisplayValue        = getCurrentDisplayValue;
   ctrl.registerSelectedItemWatcher   = registerSelectedItemWatcher;
   ctrl.unregisterSelectedItemWatcher = unregisterSelectedItemWatcher;
-  ctrl.notFoundVisible               = notFoundVisible;
+  ctrl.notFoundClick                 = notFoundClick;
 
   return init();
 
@@ -17095,7 +17096,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @returns {boolean}
    */
   function shouldHide () {
-    if (!isMinLengthMet() || !ctrl.matches.length) return true;
+    if (!isMinLengthMet() || (!ctrl.matches.length && !ctrl.hasNotFoundTemplate)) return true;
   }
 
   /**
@@ -17244,10 +17245,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     elements.$.scrollContainer.controller('mdVirtualRepeatContainer').scrollTo(offset);
   }
 
-  function notFoundVisible () {
-    return !ctrl.matches.length && !ctrl.loading && ctrl.scope.searchText && hasFocus && !ctrl.scope.selectedItem;
-  }
-
   /**
    * Starts the query to gather the results for the current searchText.  Attempts to return cached
    * results first, then forwards the process to `fetchResults` if necessary.
@@ -17279,6 +17276,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     });
   }
 
+  function notFoundClick() {
+      ctrl.loading = false;
+      ctrl.hidden = true;
+      angular.isFunction($scope.notFoundClick) && $scope.notFoundClick();
+  }
 }
 MdAutocompleteCtrl.$inject = ["$scope", "$element", "$mdUtil", "$mdConstant", "$mdTheming", "$window", "$animate", "$rootElement", "$attrs", "$q"];
 
@@ -17428,7 +17430,8 @@ function MdAutocomplete () {
       floatingLabel:  '@?mdFloatingLabel',
       autoselect:     '=?mdAutoselect',
       menuClass:      '@?mdMenuClass',
-      inputId:        '@?mdInputId'
+      inputId:        '@?mdInputId',
+      notFoundClick:  '&?mdNotFoundClick'
     },
     template:     function (element, attr) {
       var noItemsTemplate = getNoItemsTemplate(),
@@ -17446,7 +17449,7 @@ function MdAutocomplete () {
           <md-virtual-repeat-container\
               md-auto-shrink\
               md-auto-shrink-min="1"\
-              ng-hide="$mdAutocompleteCtrl.hidden && !$mdAutocompleteCtrl.notFoundVisible()"\
+              ng-hide="$mdAutocompleteCtrl.hidden"\
               class="md-autocomplete-suggestions-container md-whiteframe-z1"\
               role="presentation">\
             <ul class="md-autocomplete-suggestions"\
@@ -17482,10 +17485,9 @@ function MdAutocomplete () {
         var templateTag = element.find('md-not-found').detach(),
             template = templateTag.length ? templateTag.html() : '';
         return template
-            ? '<li ng-if="$mdAutocompleteCtrl.notFoundVisible()"\
-                         md-autocomplete-parent-scope>' + template + '</li>'
+            ? '<li ng-if="!$mdAutocompleteCtrl.matches.length" ng-click="$mdAutocompleteCtrl.notFoundClick()" ng-init="$mdAutocompleteCtrl.hasNotFoundTemplate = true"\
+                        md-autocomplete-parent-scope>' + template + '</li>'
             : '';
-
       }
 
       function getInputElement () {
