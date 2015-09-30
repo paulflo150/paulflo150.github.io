@@ -17484,7 +17484,6 @@ function MdAutocomplete () {
       function getNoItemsTemplate() {
         var templateTag = element.find('md-not-found').detach(),
             template = templateTag.length ? templateTag.html() : '';
-        //MdAutocompleteCtrl.hasNotFoundTemplate = template ? true : false;
         return template
             ? '<li ng-if="!$mdAutocompleteCtrl.matches.length" ng-click="$mdAutocompleteCtrl.notFoundClick()" ng-init="$mdAutocompleteCtrl.hasNotFoundTemplate = true"\
                         md-autocomplete-parent-scope>' + template + '</li>'
